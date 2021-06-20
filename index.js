@@ -5,6 +5,8 @@ const fileUpload = require("express-fileupload");
 const expressSession = require("express-session");
 const flash = require("connect-flash");
 
+require("dotenv").config();
+
 const newPostController = require("./controllers/newPost");
 const homeController = require("./controllers/home");
 const storePostController = require("./controllers/storePost");
@@ -21,7 +23,8 @@ const logoutController = require("./controllers/logout");
 
 global.loggedIn = null;
 
-mongoose.connect("mongodb://localhost/my_database", { useNewUrlParser: true });
+mongoose.connect("mongodb+srv://PauloMongoDB:962752692@cluster0.nmiwd.mongodb.net/my_database",
+  { useNewUrlParser: true });
 
 const app = new express();
 
@@ -51,6 +54,10 @@ app.post("/users/login", redirectIfAuthenticatedMiddleware, loginUserController)
 app.get("/auth/logout", logoutController);
 app.use((req, res) => res.render("notfound"));;
 
-app.listen(4000, () => {
-  console.log("Server is running on port 4000");
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 4000
+}
+app.listen(port, () => {
+  console.log(`Server is listening on port ${4000}`);
 });
